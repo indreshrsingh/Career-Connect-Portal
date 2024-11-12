@@ -1,6 +1,6 @@
 package com.careerconnect.jobms.job;
 
-import com.careerconnect.jobms.job.dto.JobWithCompanyDTO;
+import com.careerconnect.jobms.job.dto.JobDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class JobController {
     }
 
     @GetMapping
-    ResponseEntity<List<JobWithCompanyDTO>> findAll()
+    ResponseEntity<List<JobDTO>> findAll()
     {
         return new ResponseEntity<>(jobService.findAll(),HttpStatus.OK);
     }
@@ -31,11 +31,11 @@ public class JobController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Job> getJobById(@PathVariable Long id)
+    public ResponseEntity<JobDTO> getJobById(@PathVariable Long id)
     {
-         Job job=jobService.getJobById(id);
-         if(job!=null)
-              return new ResponseEntity<>(job, HttpStatus.OK);
+         JobDTO jobDTO = jobService.getJobById(id);
+         if(jobDTO !=null)
+              return new ResponseEntity<>(jobDTO, HttpStatus.OK);
          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

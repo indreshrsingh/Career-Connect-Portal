@@ -1,34 +1,20 @@
-package com.careerconnect.jobms.job;
+package com.careerconnect.jobms.job.dto;
 
+import com.careerconnect.jobms.job.external.Company;
+import com.careerconnect.jobms.job.external.Review;
 
-import jakarta.persistence.*;
+import java.util.List;
 
-@Entity
-//@Table(name="job_table")
-public class Job {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class JobDTO {
+
     private Long id;
     private String title;
     private String description;
     private String minSalary;
     private String maxSalary;
     private String Location;
-    private Long companyId;
-
-
-    public Job() {
-    }
-
-    public Job(Long id, String title, String description, String minSalary, String maxSalary, String location) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.minSalary = minSalary;
-        this.maxSalary = maxSalary;
-        Location = location;
-    }
-
+    private Company company;
+    private List<Review> reviews;
     public Long getId() {
         return id;
     }
@@ -77,11 +63,19 @@ public class Job {
         Location = location;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 }
