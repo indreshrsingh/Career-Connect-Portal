@@ -4,6 +4,8 @@ package com.careerconnect.jobms.job.impl;
 import com.careerconnect.jobms.job.Job;
 import com.careerconnect.jobms.job.JobRepository;
 import com.careerconnect.jobms.job.JobService;
+import com.careerconnect.jobms.job.clients.CompanyClient;
+import com.careerconnect.jobms.job.clients.ReviewClient;
 import com.careerconnect.jobms.job.dto.JobDTO;
 import com.careerconnect.jobms.job.external.Company;
 import com.careerconnect.jobms.job.external.Review;
@@ -25,17 +27,21 @@ public class JobServiceImpl implements JobService {
     JobRepository jobRepository;
     @Autowired
     RestTemplate restTemplate;
+    CompanyClient companyClient;
+    ReviewClient reviewClient;
+    public JobServiceImpl(JobRepository jobRepository,CompanyClient companyClient,ReviewClient reviewClient) {
 
-    public JobServiceImpl(JobRepository jobRepository) {
         this.jobRepository = jobRepository;
+        this.companyClient=companyClient;
+        this.reviewClient=reviewClient;
     }
 
     private JobDTO convertToJobWithCompanyDTO(Job job) {
-        long companyId = job.getCompanyId();
-        Company company = restTemplate.getForObject("http://COMPANYMS:8081/companies/" + job.getCompanyId(), Company.class);
+        Company company = companyClient.getCompany(job.getCompanyId());
+        //Company company = restTemplate.getForObject("http://COMPANYMS:8081/companies/" + job.getCompanyId(), Company.class);
         ResponseEntity<List<Review>> reviewResponse= restTemplate.exchange("http://REVIEWMS:8083/reviews?companyId=" + job.getCompanyId(), HttpMethod.GET, null,
                 new  ParameterizedTypeReference<List<Review>>(){});
-        List<Review> reviews = reviewResponse.getBody();
+        List<Review> reviews = reviewClient.getReviews(job.getCompanyId());
         JobDTO jobDTO = JobMapper.mapToJobWithCompanyDTO(job, company,reviews);
         return jobDTO;
     }
