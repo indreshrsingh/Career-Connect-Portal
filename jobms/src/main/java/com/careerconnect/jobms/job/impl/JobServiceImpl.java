@@ -10,6 +10,7 @@ import com.careerconnect.jobms.job.dto.JobDTO;
 import com.careerconnect.jobms.job.external.Company;
 import com.careerconnect.jobms.job.external.Review;
 import com.careerconnect.jobms.job.mapper.JobMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -48,6 +49,7 @@ public class JobServiceImpl implements JobService {
 
 
     @Override
+    @CircuitBreaker(name="comapnyBreaker",fallbackMethod = "companyBreakerFallBackMethod")
     public List<JobDTO> findAll() {
         List<Job> jobs = jobRepository.findAll();
         List<JobDTO> jobDTOS = new ArrayList<>();
@@ -59,12 +61,19 @@ public class JobServiceImpl implements JobService {
         return jobDTOS;
     }
 
+    public List<String> companyBreakerFallBackMethod() {
+        List<String> l=new ArrayList<>();
+        l.add("Please try after some time");
+        return l;
+    }
+
     @Override
     public void createJob(Job job) {
         jobRepository.save(job);
     }
 
     @Override
+    @CircuitBreaker(name="comapnyBreaker",fallbackMethod = "companyBreakerFallBackMethod")
     public JobDTO getJobById(Long id) {
         JobDTO jobDTO = new JobDTO();
         if (id == null) return null;
