@@ -1,5 +1,7 @@
 package com.careerconnect.companyms.company;
 
+import com.careerconnect.companyms.company.dto.ReviewMessage;
+
 import java.util.List;
 
 
@@ -10,5 +12,6 @@ public interface CompanyService {
     void createCompany(Company company);
     Boolean deleteCompany(Company company);
     Company getCompanyById(Long id);
+    Boolean updateCompany(ReviewMessage reviewMessage);
 
 }

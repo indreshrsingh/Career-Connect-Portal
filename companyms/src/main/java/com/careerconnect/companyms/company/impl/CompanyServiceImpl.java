@@ -4,6 +4,8 @@ package com.careerconnect.companyms.company.impl;
 import com.careerconnect.companyms.company.Company;
 import com.careerconnect.companyms.company.CompanyRepository;
 import com.careerconnect.companyms.company.CompanyService;
+import com.careerconnect.companyms.company.clients.ReviewClient;
+import com.careerconnect.companyms.company.dto.ReviewMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +15,10 @@ import java.util.Optional;
 public class CompanyServiceImpl implements CompanyService {
 
     CompanyRepository companyRepository;
-
-    public CompanyServiceImpl(CompanyRepository companyRepository) {
+    ReviewClient reviewClient;
+    public CompanyServiceImpl(CompanyRepository companyRepository, ReviewClient reviewClient) {
         this.companyRepository = companyRepository;
+        this.reviewClient = reviewClient;
     }
 
     @Override
@@ -42,6 +45,19 @@ public class CompanyServiceImpl implements CompanyService {
     public Company getCompanyById(Long id) {
         Optional<Company> companyOptional=companyRepository.findById(id);
         return companyOptional.orElse(null);
+    }
+
+    @Override
+    public Boolean updateCompany(ReviewMessage reviewMessage) {
+        Optional<Company> companyOptional=companyRepository.findById(reviewMessage.getCompanyId());
+        if(companyOptional.isPresent()) {
+               Company company=companyOptional.get();
+               Double rating=reviewClient.getAverageRatingforCompany(company.getId());
+               company.setRating(rating);
+               companyRepository.save(company);
+               return true;
+        }
+        return false;
     }
 
     @Override

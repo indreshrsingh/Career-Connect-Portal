@@ -15,8 +15,7 @@ private Long id;
 
 private String name;
 private String description;
-private String jobId;
-private String reviewId;
+private Double rating;
 
     public Company() {
     }
@@ -48,19 +47,11 @@ private String reviewId;
         this.description = description;
     }
 
-    public String getJobId() {
-        return jobId;
+    public Double getRating() {
+        return rating;
     }
 
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
-    }
-
-    public String getReviewId() {
-        return reviewId;
-    }
-
-    public void setReviewId(String reviewId) {
-        this.reviewId = reviewId;
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 }

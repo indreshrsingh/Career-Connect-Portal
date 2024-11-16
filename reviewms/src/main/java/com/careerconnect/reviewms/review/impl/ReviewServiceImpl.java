@@ -5,6 +5,7 @@ package com.careerconnect.reviewms.review.impl;
 import com.careerconnect.reviewms.review.Review;
 import com.careerconnect.reviewms.review.ReviewRepository;
 import com.careerconnect.reviewms.review.ReviewService;
+import com.careerconnect.reviewms.review.messaging.ReviewMessageProducer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +14,10 @@ import java.util.List;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
-
-    public ReviewServiceImpl(ReviewRepository reviewRepository) {
+    private final ReviewMessageProducer reviewMessageProducer;
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewMessageProducer reviewMessageProducer) {
         this.reviewRepository = reviewRepository;
+        this.reviewMessageProducer=reviewMessageProducer;
 
     }
 
@@ -32,6 +34,7 @@ public class ReviewServiceImpl implements ReviewService {
         {
             review.setCompanyId(companyId);
             reviewRepository.save(review);
+            reviewMessageProducer.sendMessage(review);
             return true;
         }
         return false;

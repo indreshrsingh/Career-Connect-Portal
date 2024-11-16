@@ -58,6 +58,13 @@ public class ReviewController {
          return new ResponseEntity<>("Company not found",HttpStatus.NOT_FOUND);
      }
 
+     @GetMapping("/averageRating")
+     public ResponseEntity<Double> getAverageRating(@RequestParam Long companyId)
+     {
+          List<Review> reviews = reviewService.getReviewsByCompany(companyId);
+          return new ResponseEntity<>(reviews.stream().mapToDouble(Review::getRating).average().orElse(0.0),HttpStatus.OK);
+     }
+
 
 
 
