@@ -22,18 +22,25 @@ Ensure you have the following installed:
 
 ### Clone the Repository
 bash
+
 git clone https://github.com/indreshrsingh/Career-Connect-Portal.git
+
 cd Career-Connect-Portal
 
 docker pull indresh5/gateway-ms
+
 docker pull indresh5/jobms
+
 docker pull indresh5/companyms
+
 docker pull indresh5/reviewms
+
 docker pull indresh5/servicereg
 
 docker-compose up -d
 
 
 Access the Service Registry at: http://localhost:8761/
+
 Gateway API is available at: http://localhost:8084/
 
